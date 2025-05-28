@@ -8,7 +8,7 @@
 //  Author        : $Author$
 //  Created By    : Robert Heller
 //  Created       : Tue May 27 11:29:22 2025
-//  Last Modified : <250528.1004>
+//  Last Modified : <250528.1406>
 //
 //  Description	
 //
@@ -56,6 +56,26 @@ public:
     {
     }
     virtual uint8_t &Fetch(uint16_t address) = 0;
+    void DumpMemory(uint16_t start,uint16_t length,std::ostream &out)
+    {
+        unsigned int linecount = 0;
+        uint16_t address = start;
+        out << std::setfill('0') << std::setw(4) << std::hex << address << " ";
+        while (length > 0)
+        {
+            uint8_t databyte = Fetch(address++); length--;
+            out << std::setfill('0') << std::setw(2) << std::hex << (int)databyte << " ";
+            linecount++;
+            if (linecount >= 16)
+            {
+                out << std::endl;
+                if (length > 0) 
+                    out << std::setfill('0') << std::setw(4) << std::hex << address << " ";
+                linecount = 0;
+            }
+        }
+        if (linecount > 0) out << std::endl;
+    }
 };
 
 class AllRam : public Memory
