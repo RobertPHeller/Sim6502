@@ -8,7 +8,7 @@
 //  Author        : $Author$
 //  Created By    : Robert Heller
 //  Created       : Tue May 27 11:18:12 2025
-//  Last Modified : <250528.1005>
+//  Last Modified : <250528.1339>
 //
 //  Description	
 //
@@ -64,10 +64,6 @@ int main(int argc, char *argv[])
     }
     cpu6502 Processor(&memory);
     Processor.dumpregisters(std::cout);
-    while (true)
-    {
-        Processor.execute();
-        Processor.dumpregisters(std::cout);
-    }
+    Processor.run(std::cout);
     return 0;
 }

@@ -8,7 +8,7 @@
 //  Author        : $Author$
 //  Created By    : Robert Heller
 //  Created       : Mon May 12 19:53:50 2025
-//  Last Modified : <250528.0751>
+//  Last Modified : <250528.1337>
 //
 //  Description	
 //
@@ -45,6 +45,7 @@
 #ifndef __CPU_HXX
 #define __CPU_HXX
 
+#include <csignal>
 #include <iostream>
 #include <cstdint>
 #include "memory.hxx"
@@ -55,7 +56,8 @@ public:
     ~cpu6502()
     {
     }
-    void execute();
+    void execute(std::ostream &out);
+    void run(std::ostream &out);
     void dumpregisters(std::ostream &out);          
 private:
     uint16_t PC; /* Program Counter register */
@@ -85,7 +87,7 @@ private:
             unsigned a:3;
         } bits;
     } InstrutionByte;
-    void DecodeInstruction(uint8_t ibyte);
+    void DecodeInstruction(uint8_t ibyte,std::ostream &out);
     void ALUInstruction(uint8_t a,uint8_t b);
     uint16_t BCDAdC(uint8_t operand);
     uint16_t BCDSbC(uint8_t operand);
@@ -172,6 +174,11 @@ private:
         SR.bits.C = byte & 0x01;
         byte = ((uint16_t) byte >> 1) | carry;
         SetFlags(byte);
+    }
+    static volatile std::sig_atomic_t signal_;
+    static void signal_handler(int signal)
+    {
+        signal_ = signal;
     }
 };
 

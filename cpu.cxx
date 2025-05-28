@@ -7,7 +7,7 @@
 //  Author        : $Author$
 //  Created By    : Robert Heller
 //  Created       : Mon May 12 20:51:05 2025
-//  Last Modified : <250528.1054>
+//  Last Modified : <250528.1346>
 //
 //  Description	
 //
@@ -68,17 +68,32 @@ void cpu6502::dumpregisters(std::ostream &out)
           << " I:" << SR.bits.I << " D:" << SR.bits.D << " B:" << SR.bits.B
           << " V:" << SR.bits.V << " N:" << SR.bits.N << std::endl;
 }
-void cpu6502::execute()
+void cpu6502::execute(std::ostream &out)
 {
     uint8_t IB = ram_->Fetch(PC++);
-    DecodeInstruction(IB);
+    DecodeInstruction(IB,out);
 }
 
-void cpu6502::DecodeInstruction(uint8_t ibyte)
+void cpu6502::run(std::ostream &out)
+{
+    signal_ = 0;
+    std::signal(SIGINT, signal_handler);
+    while (signal_ == 0)
+    {
+        dumpregisters(out);
+        execute(out);
+    }
+    out << "Caught SIGINT" << std::endl;
+    std::signal(SIGINT, SIG_DFL);
+    dumpregisters(out);
+    
+}
+
+void cpu6502::DecodeInstruction(uint8_t ibyte,std::ostream &out)
 {
     InstrutionByte ib;
     ib.byte = ibyte;
-    std::cout << "IB: " << std::setfill('0') << std::setw(2) << std::hex
+    out << "IB: " << std::setfill('0') << std::setw(2) << std::hex
           << (int)ibyte << std::endl;
     //std::cerr << "*** DecodeInstruction(): IB.bits.c = " << std::dec << ib.bits.c << std::endl;
     switch (ib.bits.c)
@@ -669,3 +684,4 @@ uint16_t cpu6502::BCDSbC(uint8_t operand)
     return NR | (NRU << 4) | (C1 << 8);
 }
 
+volatile std::sig_atomic_t cpu6502::signal_;
