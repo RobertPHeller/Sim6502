@@ -8,7 +8,7 @@
 //  Author        : $Author$
 //  Created By    : Robert Heller
 //  Created       : Mon May 12 19:53:50 2025
-//  Last Modified : <250528.1546>
+//  Last Modified : <250528.1624>
 //
 //  Description	
 //
@@ -81,25 +81,41 @@ public:
      */
     void dumpregisters(std::ostream &out);          
 private:
-    uint16_t PC; /** Program Counter register */
-    uint8_t AC; /** Accumulator register */
-    uint8_t X;  /** X register */
-    uint8_t Y;  /** Y register */
+    /** Program Counter register */
+    uint16_t PC;
+    /** Accumulator register */
+    uint8_t AC; 
+    /** X register */
+    uint8_t X;  
+    /** Y register */
+    uint8_t Y;
+    /** Status register */
     union {
         uint8_t byte;
         struct {
-            unsigned C:1; /** Carry bit */
-            unsigned Z:1; /** Zero bit */
-            unsigned I:1; /** Interrupt bit (IRQ disable) */
-            unsigned D:1; /** Decimal bit (use BCD for arithmetics) */
-            unsigned B:1; /** Break */
-            unsigned ignored:1; /* unused */
-            unsigned V:1; /** Overflow bit */
-            unsigned N:1; /** Negative bit */
+            /** Carry bit */
+            unsigned C:1; 
+            /** Zero bit */
+            unsigned Z:1; 
+            /** Interrupt bit (IRQ disable) */
+            unsigned I:1; 
+            /** Decimal bit (use BCD for arithmetics) */
+            unsigned D:1; 
+            /** Break */
+            unsigned B:1; 
+            /* unused */
+            unsigned ignored:1;
+            /** Overflow bit */
+            unsigned V:1; 
+            /** Negative bit */
+            unsigned N:1; 
         } bits;
-    } SR; /** Status register */
-    uint8_t SP; /** Stack pointer */
-    Memory *ram_; /** Memory */
+    } SR; 
+    /** Stack pointer */
+    uint8_t SP; 
+    /** Memory */
+    Memory *ram_; 
+    /** Instruction byte layout. */
     typedef union {
         uint8_t byte;
         struct {
@@ -107,7 +123,7 @@ private:
             unsigned b:3;
             unsigned a:3;
         } bits;
-    } InstrutionByte; /** Instruction byte layout. */
+    } InstrutionByte; 
     /** Decode and execute an instruction.
      * @param ibyte Instruction byte.
      * @param out Ostream to display the instruction byte to.

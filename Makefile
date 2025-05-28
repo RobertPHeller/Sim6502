@@ -8,7 +8,7 @@
 #  Author        : $Author$
 #  Created By    : Robert Heller
 #  Created       : Tue May 27 11:38:41 2025
-#  Last Modified : <250527.1151>
+#  Last Modified : <250528.1619>
 #
 #  Description	
 #
@@ -43,7 +43,7 @@
 ##############################################################################
 
 
-all: Sim6502
+all: Sim6502 Sim6502.pdf
 
 
 Sim6502: main.o cpu.o
@@ -55,3 +55,13 @@ Sim6502: main.o cpu.o
 main.o: main.cxx cpu.hxx memory.hxx
 
 cpu.o: cpu.cxx cpu.hxx memory.hxx 
+
+Sim6502.pdf: latex/refman.pdf
+	mv latex/refman.pdf Sim6502.pdf
+	
+
+latex/refman.pdf html/index.html: cpu.hxx memory.hxx
+	-rm latex/ html/
+	doxygen Doxyfile
+	$(MAKE) -C latex
+
