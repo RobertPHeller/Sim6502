@@ -8,7 +8,7 @@
 #  Author        : $Author$
 #  Created By    : Robert Heller
 #  Created       : Tue May 27 11:38:41 2025
-#  Last Modified : <250528.1619>
+#  Last Modified : <250528.1947>
 #
 #  Description	
 #
@@ -61,7 +61,7 @@ Sim6502.pdf: latex/refman.pdf
 	
 
 latex/refman.pdf html/index.html: cpu.hxx memory.hxx
-	-rm latex/ html/
+	-rm -rf latex/ html/
 	doxygen Doxyfile
 	$(MAKE) -C latex
 
