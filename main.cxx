@@ -8,7 +8,7 @@
 //  Author        : $Author$
 //  Created By    : Robert Heller
 //  Created       : Tue May 27 11:18:12 2025
-//  Last Modified : <250528.1414>
+//  Last Modified : <250528.1419>
 //
 //  Description	
 //
@@ -65,5 +65,6 @@ int main(int argc, char *argv[])
     memory.DumpMemory(0xFF00,256,std::cout);
     cpu6502 Processor(&memory);
     Processor.run(std::cout);
+    memory.DumpMemory(0,1024,std::cout);
     return 0;
 }
